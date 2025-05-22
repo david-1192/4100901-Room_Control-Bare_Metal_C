@@ -1,0 +1,25 @@
+flowchart TD
+ subgraph RoomControl["room_control.c"]
+        LED_ON["Enciende LED PA4\ny programa apagado en 3s"]
+        EXTI["Interrupción: Botón B1\nLlama room_control_on_button_press()"]
+        LED_TOGGLE["Toggle LED PA4"]
+        UART["Interrupción: UART\nLlama room_control_on_uart_receive()"]
+        PWM_ON["Enciende LED PWM 80%"]
+        PWM_OFF["Apaga LED PWM"]
+        LD2_TOGGLE["Toggle LED PA5"]
+        SysTick["Interrupción: SysTick\nLlama room_control_on_systick()"]
+        LED_OFF["Apaga LED PA4"]
+  end
+    Start(["Inicio"]) --> InitPeriph["Inicializar periféricos"]
+    InitPeriph --> InitApp["Llamar room_control_app_init()"]
+    InitApp --> MainLoop[/"Bucle principal"/]
+    MainLoop --> Wait["Esperar eventos (interrupciones)"] & End(["Fin"])
+    Wait -- Botón --> EXTI
+    Wait -- UART --> UART
+    Wait -- SysTick --> SysTick
+    EXTI -- Debounce OK --> LED_ON
+    UART -- Comando 't'/'T' --> LED_TOGGLE
+    UART -- Comando 'h'/'H' --> PWM_ON
+    UART -- Comando 'l'/'L' --> PWM_OFF
+    SysTick -- Cada 500ms --> LD2_TOGGLE
+    SysTick -- Han pasado 3s --> LED_OFF

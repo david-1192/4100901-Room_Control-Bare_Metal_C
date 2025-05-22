@@ -29,4 +29,10 @@ void room_control_on_uart_receive(char received_char);
  */
 void room_control_app_init(void);
 
+/**
+ * @brief Función para establecer el brillo de un LED mediante PWM.
+ * @param on El valor de brillo del LED (0-255).
+ */
+void room_control_set_pwm_led(uint8_t on);
+
 #endif // ROOM_CONTROL_H

@@ -7,6 +7,7 @@
  */
 #include "systick.h"
 #include "rcc.h" // Para SYSCLK_FREQ_HZ
+#include "room_control.h" // Para room_control_on_systick()
 
 
 // Variable global para contar los ticks de milisegundos
@@ -50,4 +51,5 @@ void systick_delay_ms(uint32_t ms)
 void SysTick_Handler(void)
 {
     g_systick_ms_count++; // Incrementar el contador de ticks global
+    room_control_on_systick(); // Llama a la función de la lógica de la aplicación
 }
